@@ -141,17 +141,6 @@ let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*'  " For Unix
 let MRU_Window_Height = 15 
 let MRU_Max_Menu_Entries = 20 
 
-
-let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*'  " For Unix 
-let MRU_Window_Height = 15 
-let MRU_Max_Menu_Entries = 20 
-
-
-let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*'  " For Unix 
-let MRU_Window_Height = 15 
-let MRU_Max_Menu_Entries = 20 
-
-
 """""""""""""""""""""""""""""
 ":Calendar (for vertical window)
 ":CalendarH (for horizontal window)
@@ -183,3 +172,34 @@ map <C-e> :NERDTreeToggle<CR>
 "  '\be' (normal open)  or 
 "  '\bs' (force horizontal split open)  or 
 "  '\bv' (force vertical split open) 
+
+
+""""""""""""""""""""""""""""
+" conque
+" Run interactive commands inside a Vim buffer
+""""""""""""""""""""""""""""
+":ConqueTerm zsh
+":ConqueTermSplit zsh
+":ConqueTermVSplit zsh
+
+""""""""""""""""""""""""""""
+" YankRing.vim : Maintains a history of previous yanks, changes and deletes 
+""""""""""""""""""""""""""""
+nnoremap <silent> <C-y> :YRShow<CR> 
+
+
+""""""""""""""""""""""""""""
+" EasyMotion : Vim motions on speed! 
+""""""""""""""""""""""""""""
+let g:EasyMotion_smartcase = 1
+map <Leader> <Plug>(easymotion-prefix)
+map  / <Plug>(easymotion-sn)
+" Multi chars search
+omap / <Plug>(easymotion-tn)
+map  n <Plug>(easymotion-next)
+map  N <Plug>(easymotion-prev)
+
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
