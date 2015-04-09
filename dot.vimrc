@@ -6,7 +6,24 @@
 
 " Use Vim settings, rather than Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
-set nocompatible
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+Plugin 'morhetz/gruvbox'
+
+Bundle 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
+
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -21,10 +38,6 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Sets how many lines of history VIM has to remember
 set history=700
-
-" Enable filetype plugins
-filetype plugin on
-filetype indent on
 
 " Set to auto read when a file is changed from the outside
 set autoread
@@ -123,15 +136,6 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
-""""""""""""""""""""""""""""""
-" => Status line
-""""""""""""""""""""""""""""""
-" Always show the status line
-set laststatus=2
-
-" Format the status line
-set statusline=%F%m%r,\ %Y,\ %{&fileformat}\ \ \ ASCII=\%b,HEX=\0x\%B\ \ \ %l,%c%V\ \ %p%% 
-
 
 """""""""""""""""""""""""""""
 " The Most Recently Used (MRU) plugin
@@ -145,18 +149,6 @@ let MRU_Max_Menu_Entries = 20
 ":Calendar (for vertical window)
 ":CalendarH (for horizontal window)
 """""""""""""""""""""""""""""
-
-" vim-colors-solarized
-syntax enable
-" set background=light
-" set background=dark
-if has('gui_running')
-    set background=light
-else
-    set background=dark
-endif
-" colorscheme solarized
-colorscheme PerfectDark
 
 """"""""""""""""""""""""""""
 " NERD Tree
@@ -203,3 +195,22 @@ au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+
+
+""""""""""""""""""""""""""""
+" Color settings
+" Using gruvbox color theme
+""""""""""""""""""""""""""""
+set t_Co=256
+syntax on
+colorscheme gruvbox
+set background=dark
+
+""""""""""""""""""""""""""""
+" Using powerline for your status line
+""""""""""""""""""""""""""""
+set rtp+=/home/user/.vim/bundle/powerline/powerline/bindings/vim  
+set guifont=Monaco\ for\ Powerline:h14.5  
+set laststatus=2  
+let g:Powerline_symbols = 'fancy'  
+set encoding=utf-8  
