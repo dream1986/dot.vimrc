@@ -23,6 +23,10 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'SirVer/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
 Plugin 'honza/vim-snippets'
+Plugin 'vim-scripts/argtextobj.vim'
+Plugin 'vim-scripts/a.vim'
+Plugin 'Yggdroot/indentLine'
+Plugin 'scrooloose/nerdcommenter'
 
 "Bundle 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'bling/vim-airline'
@@ -34,6 +38,10 @@ Plugin 'kien/ctrlp.vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
+let g:vimrc_author='Tao Zhijiang <Nicol TAO>' 
+let g:vimrc_email='taozhijiang@gmail.com' 
+let g:vimrc_homepage='http://anyshare.org  http://github.com/taozhijiang' 
+" nmap <F4> :AuthorInfoDetect<cr> 
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -241,6 +249,7 @@ nnoremap <silent> <C-y> :YRShow<CR>
 " EasyMotion : Vim motions on speed! 
 """"""""""""""""""""""""""""
 let g:EasyMotion_smartcase = 1
+let g:EasyMotion_leader_key = '<Space>'
 map <Leader> <Plug>(easymotion-prefix)
 map  / <Plug>(easymotion-sn)
 " Multi chars search
@@ -338,3 +347,43 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
+
+
+""""""""""""""""""""""""""""
+" vim-scripts/argtextobj.vim
+""""""""""""""""""""""""""""
+" You can
+" d(elete), c(hange), v(select)... an argument or inner argument in familiar ways.
+" That is, such as 'daa'(delete-an-argument) 'cia'(change-inner-argument) 'via'(select-inner-argument).
+
+""""""""""""""""""""""""""""
+" vim-scripts/a.vim
+""""""""""""""""""""""""""""
+" :A
+
+""""""""""""""""""""""""""""
+" Yggdroot/indentLine
+""""""""""""""""""""""""""""
+" :set list lcs=tab:\|\ 
+let g:indentLine_color_term = 239
+let g:indentLine_color_gui = '#A4E57E'
+let g:indentLine_color_tty_light = 7
+let g:indentLine_color_dark = 1
+let g:indentLine_char = '|'
+
+""""""""""""""""""""""""""""
+" scrooloose/nerdcommenter
+""""""""""""""""""""""""""""
+" [count]<leader>cc |NERDComComment|
+" [count]<leader>cn |NERDComNestedComment|
+" [count]<leader>c |NERDComToggleComment|
+" [count]<leader>cm |NERDComMinimalComment|
+" [count]<leader>ci |NERDComInvertComment|
+" [count]<leader>cs |NERDComSexyComment|
+" <leader>c$ |NERDComEOLComment|
+" <leader>cA |NERDComAppendComment|
+" |NERDComInsertComment|
+" <leader>ca |NERDComAltDelim|
+" [count]<leader>cl
+" [count]<leader>cb |NERDComAlignedComment|
+" [count]<leader>cu |NERDComUncommentLine|
