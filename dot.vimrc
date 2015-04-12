@@ -17,8 +17,18 @@ Plugin 'gmarik/Vundle.vim'
 
 Plugin 'morhetz/gruvbox'
 
-Bundle 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plugin 'Valloric/YouCompleteMe'
+" Ultisnips
+" Track the engine.
+Plugin 'SirVer/ultisnips'
+" Snippets are separated from the engine. Add this if you want them:
+Plugin 'honza/vim-snippets'
 
+"Bundle 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plugin 'bling/vim-airline'
+
+Plugin 'moll/vim-bbye'
+Plugin 'kien/ctrlp.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -136,6 +146,20 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
+" Enable backup
+set backup
+" Set backup directory
+set backupdir=~/.vim/backup
+" Set swap file directory
+set directory=~/.vim/swap,/tmp
+" Keep more backups for one file
+autocmd BufWritePre * let &backupext = strftime(".%m-%d-%H-%M")
+
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+nnoremap <Space> <Nop>
+let mapleader = "\<Space>"
+let g:mapleader = "\<Space>"
 
 """""""""""""""""""""""""""""
 " The Most Recently Used (MRU) plugin
@@ -144,6 +168,7 @@ let MRU_Max_Entries = 200
 let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*'  " For Unix 
 let MRU_Window_Height = 15 
 let MRU_Max_Menu_Entries = 20 
+nmap <Leader>mru :MRU<cr>
 
 """""""""""""""""""""""""""""
 ":Calendar (for vertical window)
@@ -157,19 +182,51 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 map <C-e> :NERDTreeToggle<CR>
+let g:NERDTree_title="[NERDTree]"  
+function! NERDTree_Start()  
+        exec 'NERDTree'  
+endfunction  
+function! NERDTree_IsValid()  
+    return 1  
+endfunction  
 
-""""""""""""""""""""""""""""
-" bufexplorer
-""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
+" BufExplorer
+""""""""""""""""""""""""""""""
 "  '\be' (normal open)  or 
 "  '\bs' (force horizontal split open)  or 
 "  '\bv' (force vertical split open) 
+nnoremap <script> <silent> <script> <Leader>be :BufExplorer<CR>
+nnoremap <script> <silent> <script> <Leader>bv :BufExplorerVerticalSplit<CR>
+nnoremap <script> <silent> <script> <Leader>bs :BufExplorerHorizontalSplit<CR>
+let g:bufExplorerDefaultHelp=0       " Do not show default help.
+let g:bufExplorerShowRelativePath=1  " Show relative paths.
+let g:bufExplorerSortBy='mru'        " Sort by most recently used.
+let g:bufExplorerSplitRight=0        " Split left.
+let g:bufExplorerSplitVertical=1     " Split vertically.
+let g:bufExplorerSplitVertSize = 30  " Split width
+let g:bufExplorerUseCurrentWindow=1  " Open in new window.
+autocmd BufWinEnter \[Buf\ List\] setl nonumber 
+
+""""""""""""""""""""""""""""
+" WinManager
+""""""""""""""""""""""""""""
+let g:winManagerWindowLayout = "BufExplorer,NERDTree"
+let g:winManagerWidth = 30
+let g:defaultExplorer = 0
+map <c-w><c-f> :FirstExplorerWindow<cr> 
+map <c-w><c-b> :BottomExplorerWindow<cr> 
+map <c-w><c-t> :WMToggle<cr> 
+"使用w-m作为启动winmanager快捷键，以下的配置是为了解决NERDTree的显示问题
+nmap wm :if IsWinManagerVisible() <BAR> WMToggle<CR> <BAR> else <BAR> WMToggle<CR>:q<CR> endif <CR><CR>
 
 
 """"""""""""""""""""""""""""
 " conque
 " Run interactive commands inside a Vim buffer
 """"""""""""""""""""""""""""
+" Zsh have some problem here, just use bash instead
+map <Leader>sh :ConqueTermVSplit bash<CR>
 ":ConqueTerm zsh
 ":ConqueTermSplit zsh
 ":ConqueTermVSplit zsh
@@ -207,10 +264,77 @@ colorscheme gruvbox
 set background=dark
 
 """"""""""""""""""""""""""""
-" Using powerline for your status line
+" Using airline for your status line
 """"""""""""""""""""""""""""
-set rtp+=/home/user/.vim/bundle/powerline/powerline/bindings/vim  
-set guifont=Monaco\ for\ Powerline:h14.5  
 set laststatus=2  
-let g:Powerline_symbols = 'fancy'  
 set encoding=utf-8  
+let g:airline_theme = 'powerlineish'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+" 开启tabline
+let g:airline#extensions#tabline#enabled = 1
+" tabline中当前buffer两端的分隔字符
+let g:airline#extensions#tabline#left_sep = ' '
+" tabline中未激活buffer两端的分隔字符
+let g:airline#extensions#tabline#left_alt_sep = '|'
+" tabline中buffer显示编号
+let g:airline#extensions#tabline#buffer_nr_show = 1
+" 映射切换buffer的键位
+nnoremap <Leader>bp :bp<CR>
+nnoremap <Leader>bn :bn<CR>
+" 由于原生的:bd在删除当前buffer时会将整个窗口关闭，故使用Bbye的:Bd
+nnoremap <Leader>bd :Bd<CR>
+
+
+""""""""""""""""""""""""""""
+" CtrlP 
+""""""""""""""""""""""""""""
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
+" Press <F5> to purge the cache for the current directory to get new files, remove deleted files and apply new ignore options.
+" Press <c-f> and <c-b> to cycle between modes.
+" Press <c-d> to switch to filename only search instead of full path.
+" Press <c-r> to switch to regexp mode.
+" Use <c-j>, <c-k> or the arrow keys to navigate the result list.
+" Use <c-t> or <c-v>, <c-x> to open the selected entry in a new tab or in a new split.
+" Use <c-n>, <c-p> to select the next/previous string in the prompt's history.
+" Use <c-y> to create a new file and its parent directories.
+" Use <c-z> to mark/unmark multiple files and <c-o> to open them.
+" Submit two or more dots .. to go up the directory tree by one or multiple levels.
+" Use :25 to jump to line 25.
+
+""""""""""""""""""""""""""""
+" tagbar
+""""""""""""""""""""""""""""
+nmap <Leader>tb :Tagbar<cr>
+let tagbar_width=25
+
+
+""""""""""""""""""""""""""""
+"YouCompleteMe 
+""""""""""""""""""""""""""""
+nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+" Do not ask when starting vim
+let g:ycm_confirm_extra_conf = 0
+
+
+""""""""""""""""""""""""""""
+" Ultisnips
+""""""""""""""""""""""""""""
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
