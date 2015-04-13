@@ -28,6 +28,10 @@ Plugin 'vim-scripts/a.vim'
 Plugin 'Yggdroot/indentLine'
 Plugin 'scrooloose/nerdcommenter'
 
+Bundle 'dyng/ctrlsf.vim'
+
+Plugin 'kshenoy/vim-signature'
+
 "Bundle 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'bling/vim-airline'
 
@@ -86,6 +90,38 @@ set showmatch
 " How many tenths of a second to blink when matching brackets
 set mat=2
 
+" 禁止显示滚动条
+set guioptions-=l
+set guioptions-=L
+set guioptions-=r
+set guioptions-=R
+" 禁止显示菜单和工具条
+set guioptions-=m
+set guioptions-=T
+
+" 开启行号显示
+set number
+" 高亮显示当前行/列
+set cursorline
+set cursorcolumn
+
+" 设置 gvim 显示字体
+" Not work right now
+set guifont=YaHei\ Consolas\ Hybrid\ 11.5
+set guifontwide=YaHei\ Consolas\ Hybrid\ 11.5
+
+" 将制表符扩展为空格
+set expandtab
+
+" Be smart when using tabs ;)
+set smarttab
+" 设置编辑时制表符占用空格数
+set tabstop=4
+" 设置格式化时制表符占用空格数
+set shiftwidth=4
+" 让 vim 把连续数量的空格视为一个制表符
+set softtabstop=4
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colors and Fonts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -118,16 +154,6 @@ set noswapfile
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Use spaces instead of tabs
-set expandtab
-
-" Be smart when using tabs ;)
-set smarttab
-
-" 1 tab == 4 spaces
-set shiftwidth=4
-set tabstop=4
-
 " Linebreak on 500 characters
 set lbr
 set tw=500
@@ -136,8 +162,49 @@ set ai "Auto indent
 set si "Smart indent
 set wrap "Wrap lines
 
+" 基于缩进或语法进行代码折叠
+" set foldmethod=indent
+set foldmethod=syntax
+" 启动 vim 时关闭折叠代码
+set nofoldenable
+" za，打开或关闭当前折叠；
+" zM，关闭所有折叠；
+" zR，打开所有折叠
 
 """"""""""""""""""""""""""""""
+" 标签跳转
+""""""""""""""""""""""""""""""
+let g:SignatureMap = {
+        \ 'Leader'             :  "m",
+        \ 'PlaceNextMark'      :  "m,",
+        \ 'ToggleMarkAtLine'   :  "m.",
+        \ 'PurgeMarksAtLine'   :  "m-",
+        \ 'DeleteMark'         :  "dm",
+        \ 'PurgeMarks'         :  "mda",
+        \ 'PurgeMarkers'       :  "m<BS>",
+        \ 'GotoNextLineAlpha'  :  "']",
+        \ 'GotoPrevLineAlpha'  :  "'[",
+        \ 'GotoNextSpotAlpha'  :  "`]",
+        \ 'GotoPrevSpotAlpha'  :  "`[",
+        \ 'GotoNextLineByPos'  :  "]'",
+        \ 'GotoPrevLineByPos'  :  "['",
+        \ 'GotoNextSpotByPos'  :  "mn",
+        \ 'GotoPrevSpotByPos'  :  "mp",
+        \ 'GotoNextMarker'     :  "[+",
+        \ 'GotoPrevMarker'     :  "[-",
+        \ 'GotoNextMarkerAny'  :  "]=",
+        \ 'GotoPrevMarkerAny'  :  "[=",
+        \ 'ListLocalMarks'     :  "ms",
+        \ 'ListLocalMarkers'   :  "m?"
+        \ }
+" 常用的几个标签命令
+" mx 设定/取消当前行名为 x 的标签
+" m, 自动设定下一个可用书签名
+" mda 删除当前文件中所有独立书签
+" ms 罗列出当前文件中所有书签
+" mn 按行号前后顺序，跳转至下个独立书签
+" mp 按行号前后顺序，跳转至前个独立书签
+
 " => Visual mode related
 """"""""""""""""""""""""""""""
 " Visual mode pressing * or # searches for the current selection
@@ -225,7 +292,7 @@ let g:defaultExplorer = 0
 map <c-w><c-f> :FirstExplorerWindow<cr> 
 map <c-w><c-b> :BottomExplorerWindow<cr> 
 map <c-w><c-t> :WMToggle<cr> 
-"ʹ��w-m��Ϊ����winmanager��ݼ������µ�������Ϊ�˽��NERDTree����ʾ����
+"使用w-m作为启动winmanager快捷键，以下的配置是为了解决NERDTree的显示问题
 nmap wm :if IsWinManagerVisible() <BAR> WMToggle<CR> <BAR> else <BAR> WMToggle<CR>:q<CR> endif <CR><CR>
 
 
@@ -243,6 +310,7 @@ map <Leader>sh :ConqueTermVSplit bash<CR>
 " YankRing.vim : Maintains a history of previous yanks, changes and deletes 
 """"""""""""""""""""""""""""
 nnoremap <silent> <C-y> :YRShow<CR> 
+let g:yankring_history_file = ".vim/backup/yankring_history"
 
 
 """"""""""""""""""""""""""""
@@ -250,10 +318,13 @@ nnoremap <silent> <C-y> :YRShow<CR>
 """"""""""""""""""""""""""""
 let g:EasyMotion_smartcase = 1
 let g:EasyMotion_leader_key = '<Space>'
+" <Space>-w :look up afterword
+" <Space>-b :look up backword
 map <Leader> <Plug>(easymotion-prefix)
 map  / <Plug>(easymotion-sn)
 " Multi chars search
 omap / <Plug>(easymotion-tn)
+" 上一个或者下一个查找
 map  n <Plug>(easymotion-next)
 map  N <Plug>(easymotion-prev)
 
@@ -280,18 +351,18 @@ set encoding=utf-8
 let g:airline_theme = 'powerlineish'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
-" ����tabline
+" 开启tabline
 let g:airline#extensions#tabline#enabled = 1
-" tabline�е�ǰbuffer���˵ķָ��ַ�
+" tabline中当前buffer两端的分隔字符
 let g:airline#extensions#tabline#left_sep = ' '
-" tabline��δ����buffer���˵ķָ��ַ�
+" tabline中未激活buffer两端的分隔字符
 let g:airline#extensions#tabline#left_alt_sep = '|'
-" tabline��buffer��ʾ���
+" tabline中buffer显示编号
 let g:airline#extensions#tabline#buffer_nr_show = 1
-" ӳ���л�buffer�ļ�λ
+" 映射切换buffer的键位
 nnoremap <Leader>bp :bp<CR>
 nnoremap <Leader>bn :bn<CR>
-" ����ԭ����:bd��ɾ����ǰbufferʱ�Ὣ�������ڹرգ���ʹ��Bbye��:Bd
+" 由于原生的:bd在删除当前buffer时会将整个窗口关闭，故使用Bbye的:Bd
 nnoremap <Leader>bd :Bd<CR>
 
 
@@ -332,9 +403,30 @@ let tagbar_width=25
 "YouCompleteMe 
 """"""""""""""""""""""""""""
 nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" 菜单
+highlight Pmenu ctermfg=2 ctermbg=3 guifg=#005f87 guibg=#EEE8D5
+" 选中项
+highlight PmenuSel ctermfg=2 ctermbg=3 guifg=#AFD700 guibg=#106900
 " let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 " Do not ask when starting vim
 let g:ycm_confirm_extra_conf = 0
+" 补全功能在注释中同样有效
+let g:ycm_complete_in_comments=1
+" 引入 C++ 标准库tags
+set tags+=/home/user/.vim/tags/usr_include.tags
+set tags+=/home/user/.vim/tags/linux_4.0.tags
+
+" YCM 集成 OmniCppComplete 补全引擎，设置其快捷键
+" inoremap <C-x><C-o>
+" 补全内容不以分割子窗口形式出现，只显示补全列表
+set completeopt-=preview
+" 从第一个键入字符就开始罗列匹配项
+let g:ycm_min_num_of_chars_for_completion=1
+" 禁止缓存匹配项，每次都重新生成匹配项
+let g:ycm_cache_omnifunc=0
+" 语法关键字补全         
+let g:ycm_seed_identifiers_with_syntax=1
+
 
 
 """"""""""""""""""""""""""""
@@ -387,3 +479,9 @@ let g:indentLine_char = '|'
 " [count]<leader>cl
 " [count]<leader>cb |NERDComAlignedComment|
 " [count]<leader>cu |NERDComUncommentLine|
+"
+
+""""""""""""""""""""""""""""
+" scrooloose/nerdcommenter
+""""""""""""""""""""""""""""
+
